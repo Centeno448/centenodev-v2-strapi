@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_shared_text_lists",
+  "info": {
+    "displayName": "Text List",
+    "icon": "bulletList",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "item": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.text"
+    }
+  }
+}
