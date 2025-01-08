@@ -53,11 +53,12 @@ export interface SharedSlider extends Struct.ComponentSchema {
 export interface SharedText extends Struct.ComponentSchema {
   collectionName: 'components_shared_texts';
   info: {
+    description: '';
     displayName: 'Text';
     icon: 'pencil';
   };
   attributes: {
-    Text: Schema.Attribute.Text;
+    text: Schema.Attribute.Text & Schema.Attribute.Required;
   };
 }
 
@@ -69,7 +70,8 @@ export interface SharedTextList extends Struct.ComponentSchema {
     icon: 'bulletList';
   };
   attributes: {
-    item: Schema.Attribute.Component<'shared.text', true>;
+    item: Schema.Attribute.Component<'shared.text', true> &
+      Schema.Attribute.Required;
   };
 }
 

@@ -10,7 +10,8 @@
     "item": {
       "type": "component",
       "repeatable": true,
-      "component": "shared.text"
+      "component": "shared.text",
+      "required": true
     }
   }
 }

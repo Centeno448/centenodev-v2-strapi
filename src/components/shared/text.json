@@ -2,12 +2,14 @@
   "collectionName": "components_shared_texts",
   "info": {
     "displayName": "Text",
-    "icon": "pencil"
+    "icon": "pencil",
+    "description": ""
   },
   "options": {},
   "attributes": {
-    "Text": {
-      "type": "text"
+    "text": {
+      "type": "text",
+      "required": true
     }
   }
 }

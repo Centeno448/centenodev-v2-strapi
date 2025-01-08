@@ -28,12 +28,18 @@
     "lessons": {
       "type": "component",
       "repeatable": false,
-      "component": "shared.text-list"
+      "component": "shared.text-list",
+      "required": true
     },
     "challenges": {
       "type": "component",
       "repeatable": false,
-      "component": "shared.text-list"
+      "component": "shared.text-list",
+      "required": true
+    },
+    "summary": {
+      "type": "text",
+      "required": true
     }
   }
 }
