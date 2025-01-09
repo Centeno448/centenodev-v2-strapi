@@ -1,7 +1,7 @@
 import type { Core } from '@strapi/strapi';
-import { triggerProjectRevalidation } from "./revalidation";
+import { triggerNextRevalidation, getSlugFromDeletedProject } from "./revalidation";
 
-const applyTo = ['api::project.project'];
+const applyTo = ['api::project.project', 'api::homepage.homepage'];
 
 export default {
   /**
@@ -11,14 +11,56 @@ export default {
    * This gives you an opportunity to extend code.
    */
   register({ strapi }: { strapi: Core.Strapi }) {
-    strapi.documents.use((context, next) => {
+    strapi.documents.use(async (context, next) => {
       if (!applyTo.includes(context.uid)) {
         return next();
       }
 
       // Only run for certain actions
       if (['create', 'update', 'delete'].includes(context.action)) {
-        triggerProjectRevalidation();
+        switch (context.uid) {
+          case "api::project.project":
+            let slug: string = "";
+
+            switch (context.action) {
+              case "delete":
+                slug = await getSlugFromDeletedProject(context.params.documentId);
+                break;
+              case "create":
+              case "update":
+                slug = context.params.data.slug;
+                break;
+              default:
+                break;
+            }
+
+            if (slug) {
+              try {
+                const path = `/projects/${slug}`;
+                await triggerNextRevalidation(path, "projects");
+              }
+              catch (error) {
+                strapi.log.error(`Failed to trigger project revalidation with error ${error}`);
+              }
+            }
+            else {
+              strapi.log.warn(`Failed to trigger project revalidation for action ${context.action}. Slug not set`);
+            }
+
+            break;
+
+          case "api::homepage.homepage":
+            try {
+              await triggerNextRevalidation("/");
+            }
+            catch (error) {
+              strapi.log.error(`Failed to trigger homepage revalidation with error ${error}`);
+            }
+            break;
+          default:
+            break;
+        }
+
       }
 
       return next();
