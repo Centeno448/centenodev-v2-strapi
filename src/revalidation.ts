@@ -12,7 +12,7 @@ export async function triggerNextRevalidation(path: string, tag?: string) {
     });
 }
 
-export async function getSlugFromDeletedProject(documentId: string): Promise<string> {
+export async function getProjectSlug(documentId: string): Promise<string> {
     const res = await strapi.db.query('api::project.project').findOne({
         select: ['slug'],
         where: { documentId }

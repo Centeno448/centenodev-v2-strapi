@@ -1,5 +1,5 @@
 import type { Core } from '@strapi/strapi';
-import { triggerNextRevalidation, getSlugFromDeletedProject } from "./revalidation";
+import { triggerNextRevalidation, getProjectSlug } from "./revalidation";
 
 const applyTo = ['api::project.project', 'api::homepage.homepage'];
 
@@ -20,24 +20,36 @@ export default {
       if (['create', 'update', 'delete'].includes(context.action)) {
         switch (context.uid) {
           case "api::project.project":
-            let slug: string = "";
+            let slugs: string[] = [];
 
             switch (context.action) {
               case "delete":
-                slug = await getSlugFromDeletedProject(context.params.documentId);
+                slugs = [await getProjectSlug(context.params.documentId)];
                 break;
               case "create":
+                slugs = [context.params.data.slug];
+                break;
               case "update":
-                slug = context.params.data.slug;
+                const oldSlug = await getProjectSlug(context.params.documentId);
+                const newSlug = context.params.data.slug;
+
+                slugs = [newSlug];
+
+                if (oldSlug != newSlug) {
+                  slugs.push(oldSlug);
+                }
                 break;
               default:
                 break;
             }
 
-            if (slug) {
+            if (slugs.length) {
               try {
-                const path = `/projects/${slug}`;
-                await triggerNextRevalidation(path, "projects");
+                slugs.map(async (slug: string, index: number) => {
+                  const path = `/projects/${slug}`;
+                  const tag = index == 0 ? "projects" : "";
+                  await triggerNextRevalidation(path, tag);
+                });
               }
               catch (error) {
                 strapi.log.error(`Failed to trigger project revalidation with error ${error}`);
