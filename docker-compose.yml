@@ -1,0 +1,26 @@
+name: centenodev
+
+services:
+  strapi:
+    container_name: centenodev-strapi
+    networks:
+      - centenodev
+    ports:
+      - 1337:1337
+    build:
+      context: .
+      dockerfile: Dockerfile
+  postgres:
+    image: postgres:16
+    container_name: centenodev-postgres
+    networks:
+      - centenodev
+    volumes:
+      - centenodev-data:/var/lib/postgresql/data
+
+volumes:
+  centenodev-data:
+    external: true
+
+networks:
+  centenodev:

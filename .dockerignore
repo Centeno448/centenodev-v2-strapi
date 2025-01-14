@@ -1,0 +1,6 @@
+node_modules
+dist
+.vscode
+.strapi*
+Dockerfile
+docker-compose.yml
