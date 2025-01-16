@@ -4,3 +4,4 @@ dist
 .strapi*
 Dockerfile
 docker-compose.yml
+bin
