@@ -443,13 +443,13 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    challenges: Schema.Attribute.Component<'shared.text-list', false> &
+    challenges: Schema.Attribute.Component<'shared.text', true> &
       Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
-    lessons: Schema.Attribute.Component<'shared.text-list', false> &
+    lessons: Schema.Attribute.Component<'shared.text', true> &
       Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -461,6 +461,7 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
     publishedAt: Schema.Attribute.DateTime;
+    repos: Schema.Attribute.Component<'shared.repo', true>;
     slug: Schema.Attribute.UID & Schema.Attribute.Required;
     summary: Schema.Attribute.Text & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;

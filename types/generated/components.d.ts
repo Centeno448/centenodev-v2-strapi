@@ -11,6 +11,19 @@ export interface SharedMedia extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedRepo extends Struct.ComponentSchema {
+  collectionName: 'components_shared_repos';
+  info: {
+    description: '';
+    displayName: 'repo';
+    icon: 'archive';
+  };
+  attributes: {
+    linkText: Schema.Attribute.String;
+    url: Schema.Attribute.String;
+  };
+}
+
 export interface SharedRichText extends Struct.ComponentSchema {
   collectionName: 'components_shared_rich_texts';
   info: {
@@ -62,28 +75,15 @@ export interface SharedText extends Struct.ComponentSchema {
   };
 }
 
-export interface SharedTextList extends Struct.ComponentSchema {
-  collectionName: 'components_shared_text_lists';
-  info: {
-    description: '';
-    displayName: 'Text List';
-    icon: 'bulletList';
-  };
-  attributes: {
-    item: Schema.Attribute.Component<'shared.text', true> &
-      Schema.Attribute.Required;
-  };
-}
-
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'shared.media': SharedMedia;
+      'shared.repo': SharedRepo;
       'shared.rich-text': SharedRichText;
       'shared.seo': SharedSeo;
       'shared.slider': SharedSlider;
       'shared.text': SharedText;
-      'shared.text-list': SharedTextList;
     }
   }
 }

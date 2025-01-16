@@ -1,5 +1,5 @@
 import type { Core } from '@strapi/strapi';
-import { triggerNextRevalidation, getProjectSlug } from "./revalidation";
+import { triggerNextRevalidation, getProjectSlug } from './revalidation';
 
 const applyTo = ['api::project.project', 'api::homepage.homepage'];
 
@@ -19,17 +19,17 @@ export default {
       // Only run for certain actions
       if (['create', 'update', 'delete'].includes(context.action)) {
         switch (context.uid) {
-          case "api::project.project":
+          case 'api::project.project':
             let slugs: string[] = [];
 
             switch (context.action) {
-              case "delete":
+              case 'delete':
                 slugs = [await getProjectSlug(context.params.documentId)];
                 break;
-              case "create":
+              case 'create':
                 slugs = [context.params.data.slug];
                 break;
-              case "update":
+              case 'update':
                 const oldSlug = await getProjectSlug(context.params.documentId);
                 const newSlug = context.params.data.slug;
 
@@ -44,35 +44,37 @@ export default {
             }
 
             if (slugs.length) {
-              try {
-                slugs.map(async (slug: string, index: number) => {
-                  const path = `/projects/${slug}`;
-                  const tag = index == 0 ? "projects" : "";
+              slugs.map(async (slug: string, index: number) => {
+                const path = `/projects/${slug}`;
+                const tag = index == 0 ? 'projects' : '';
+                try {
                   await triggerNextRevalidation(path, tag);
-                });
-              }
-              catch (error) {
-                strapi.log.error(`Failed to trigger project revalidation with error ${error}`);
-              }
-            }
-            else {
-              strapi.log.warn(`Failed to trigger project revalidation for action ${context.action}. Slug not set`);
+                } catch (error) {
+                  strapi.log.error(
+                    `Failed to trigger project revalidation with error ${error}`
+                  );
+                }
+              });
+            } else {
+              strapi.log.warn(
+                `Failed to trigger project revalidation for action ${context.action}. Slug not set`
+              );
             }
 
             break;
 
-          case "api::homepage.homepage":
+          case 'api::homepage.homepage':
             try {
-              await triggerNextRevalidation("/");
-            }
-            catch (error) {
-              strapi.log.error(`Failed to trigger homepage revalidation with error ${error}`);
+              await triggerNextRevalidation('/');
+            } catch (error) {
+              strapi.log.error(
+                `Failed to trigger homepage revalidation with error ${error}`
+              );
             }
             break;
           default:
             break;
         }
-
       }
 
       return next();
@@ -86,5 +88,5 @@ export default {
    * This gives you an opportunity to set up your data model,
    * run jobs, or perform some special logic.
    */
-  bootstrap(/* { strapi }: { strapi: Core.Strapi } */) { },
+  bootstrap(/* { strapi }: { strapi: Core.Strapi } */) {},
 };
