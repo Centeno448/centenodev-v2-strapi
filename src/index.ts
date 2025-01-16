@@ -44,16 +44,16 @@ export default {
             }
 
             if (slugs.length) {
-              try {
-                slugs.map(async (slug: string, index: number) => {
-                  const path = `/projects/${slug}`;
-                  const tag = index == 0 ? "projects" : "";
+              slugs.map(async (slug: string, index: number) => {
+                const path = `/projects/${slug}`;
+                const tag = index == 0 ? "projects" : "";
+                try {
                   await triggerNextRevalidation(path, tag);
-                });
-              }
-              catch (error) {
-                strapi.log.error(`Failed to trigger project revalidation with error ${error}`);
-              }
+                }
+                catch (error) {
+                  strapi.log.error(`Failed to trigger project revalidation with error ${error}`);
+                }
+              });
             }
             else {
               strapi.log.warn(`Failed to trigger project revalidation for action ${context.action}. Slug not set`);
