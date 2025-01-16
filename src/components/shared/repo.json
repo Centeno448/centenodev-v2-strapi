@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_shared_repos",
+  "info": {
+    "displayName": "repo",
+    "icon": "archive",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "linkText": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  }
+}
