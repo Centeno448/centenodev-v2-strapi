@@ -16,6 +16,8 @@ export default {
         return next();
       }
 
+      const locale = context.params.locale ?? 'en';
+
       // Only run for certain actions
       if (['create', 'update', 'delete'].includes(context.action)) {
         switch (context.uid) {
@@ -45,7 +47,7 @@ export default {
 
             if (slugs.length) {
               slugs.map(async (slug: string, index: number) => {
-                const path = `/projects/${slug}`;
+                const path = `/${locale}/projects/${slug}`;
                 const tag = index == 0 ? 'projects' : '';
                 try {
                   await triggerNextRevalidation(path, tag);
@@ -65,7 +67,7 @@ export default {
 
           case 'api::homepage.homepage':
             try {
-              await triggerNextRevalidation('/');
+              await triggerNextRevalidation(`/${locale}`);
             } catch (error) {
               strapi.log.error(
                 `Failed to trigger homepage revalidation with error ${error}`
